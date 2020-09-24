@@ -1,20 +1,15 @@
----
-layout: null
-sitemap:
-  exclude: 'yes'
----
 [
-  {% for post in site.posts %}
+  
     {
-      "title"    : "{{ post.title | escape }}",
-      "title-lower"    : "{{ post.title | escape | downcase}}",
-      "sub-titile" : "{{ post.subtitle | escape }}",
-      "sub-titile-lower" : "{{ post.subtitle | escape | downcase}}",
-      "categories" : "{{ post.categories }}",
-      "tags"     : "{{ post.tags | join: ', ' }}",
-      "url"      : "{{ site.baseurl }}{{ post.url }}",
-      "date"     : "{{ post.date }}",
-      "content"     : "{{ post.content | strip_html | strip_newlines | remove_chars | escape | truncate:200 }}"
-    } {% unless forloop.last %},{% endunless %}
-  {% endfor %}
+      "title"    : "Welcome to Jekyll!",
+      "title-lower"    : "welcome to jekyll!",
+      "sub-titile" : "",
+      "sub-titile-lower" : "",
+      "categories" : "jekyllupdate",
+      "tags"     : "",
+      "url"      : "/jekyll/update/2020/09/24/welcome-to-jekyll.html",
+      "date"     : "2020-09-24 14:18:58 +0200",
+      "content"     : "You’ll find this post in your _posts directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run je..."
+    } 
+  
 ]
