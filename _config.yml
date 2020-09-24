@@ -3,7 +3,7 @@ author: Muhammad Nasef
 email: muhammadelnasef@gmail.com
 description: Muhammad Nasef | Application Security Engineer 
 show_excerpts: true # set to true to show excerpts on the homepage
-
+permalink: /blog/:title/
 # Minima date format
 # refer to http://shopify.github.io/liquid/filters/date/ if you want to customize this
 sass:
