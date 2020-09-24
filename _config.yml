@@ -1,16 +1,12 @@
 title: Muhammad Nasef | Application Security Engineer
 author: Muhammad Nasef
 email: muhammadelnasef@gmail.com
-description: > # this means to ignore newlines until "show_exerpts:"
-  Write an awesome description for your new site here. You can edit this
-  line in _config.yml. It will appear in your document head meta (for
-  Google search results) and in your feed.xml site description.
-show_excerpts: true # set to true to show excerpts on the homepage
+description: Muhammad Nasef | Application Security Engineer  
+show_excerpts: true e
 
-# Minima date format
-# refer to http://shopify.github.io/liquid/filters/date/ if you want to customize this
 sass:
   sass_dir: _sass
+
 plainwhite:
   name: Muhammad Nasef
   tagline: Application Security Engineer
