@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Matrix:3 Vulnhub Walkthrough"
-date:   2020-09-25 15:00:00 +0530
+date:   2020-09-26 15:00:00 +0530
 categories: VulnHub CTF
 ---
 Matrix:3 is a machine in which I used a combination of enumeration and reverse engineering to obtain shell access and then exploited the misconfigured sudo permissions to get root Access.
@@ -83,7 +83,7 @@ tryed to unzip it but failed as it's not a gz file. so i run file command and fo
 
 ![Username](/assets/machines/vulnhub/matrix3/2.png)
 
-I tried to use those credinatials to connect via ssh but no luck . so I tried to access the http service on the other port and found out that there is a basic authenticaion dialog. I used the credintials found above and voila it worked !
+I tried to use those credinatials to connect via ssh but no luck. so, I tried to access the http service on the other port and found out that there is a basic authenticaion dialog. I used the credintials found above and voila it worked!
 
 ![Username](/assets/machines/vulnhub/matrix3/3.png)
 
@@ -148,7 +148,6 @@ Stream name: MZ� 4
 205 0x0000258d 0x0040498d   4   6 ()  utf8 \a@\t blocks=Basic Latin,Combining Diacritical Marks
 206 0x000025c0 0x004049c0  10  11 () ascii "';i6$Jh5c
 
-
 ```
 I found a combination of "guest:7R1n17yN30" Immeditatly I used it to login via ssh 
 ## Escalation to Trinity
@@ -168,7 +167,7 @@ User guest may run the following commands on matrix:
     (trinity) NOPASSWD: /bin/cp
 ```
 
-So I thought of generating a ssh key and replacing the existing one on trinity user. so we could access it with the password we generated 
+So, I thought of generating a ssh key and replacing the existing one on trinity user. so, we could access it with the password we generated 
 ```
 guest@matrix:~$ ssh-keygen 
 Generating public/private rsa key pair.
@@ -210,7 +209,7 @@ uid=1001(trinity) gid=1001(trinity) groups=1001(trinity)
 
 ## Escalation to Root
 
-Running sudo -l again , now we could execute a script called oracle as root. but when I cd to /home/trinity I didnt' find this script . so I created a scirpt with a same name containing the word "/bin/bash"
+Running sudo -l again, now we could execute a script called oracle as root. but when I cd to /home/trinity I didnt' find this script. so, I created a scirpt with a same name containing the word "/bin/bash"
 ```
 sh-4.4$ sudo -l
 User trinity may run the following commands on matrix:
@@ -246,7 +245,6 @@ root
 sh-4.4# cd ~
 sh-4.4# cat flag.txt 
 
-
              ,----------------,              ,---------,
         ,-----------------------,          ,"        ,"|
       ,"                      ,"|        ,"        ,"  |
@@ -268,10 +266,10 @@ sh-4.4# cat flag.txt
 
 -[ 7h!5 !5 n07 7h3 3nd, m47r!x w!11 r37urn ]-
 
-
 ```
 
 and voila here is the root privilege!
+
 
 
 
