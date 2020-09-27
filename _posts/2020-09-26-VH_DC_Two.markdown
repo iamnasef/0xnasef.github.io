@@ -74,10 +74,10 @@ kali@kali:~$ cewl http://dc-2 > Desktop/wl
 
 I was curios of how I use this wordlist, I had many thoughts
 
-1- Use this wordlist in gobuster to enumerate the directories (Failed)
-2- Use this wordlist in Burpsuite to bruteforce password as admin (Failed)
-3- Use this wordlist in Burpsuite to enumerate users (Failed)
-4- I used the wordlist in wpscan to bruteforce the password (Worked!)
+1. Use this wordlist in gobuster to enumerate the directories (Failed)
+2. Use this wordlist in Burpsuite to bruteforce password as admin (Failed)
+3. Use this wordlist in Burpsuite to enumerate users (Failed)
+4. I used the wordlist in wpscan to bruteforce the password (Worked!)
 
 ```
 root@kali:/home/kali# wpscan -P Desktop/wl --url http://dc-2
