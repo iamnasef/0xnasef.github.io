@@ -253,7 +253,7 @@ Go on - git outta here!!!!
 ```
 
 ## Privilege Escalation 
-I ran diffreent Enumeration scripts and found an intersting sudo privilege which allows us to run git as root. after searching in the gtfio of how to get a root shell. I ran the following commands.
+I ran diffrenet Enumeration scripts and found an intersting sudo privilege which allows us to run git as root. after searching in the gtfio of how to get a root shell. I ran the following commands.
 
 ```
 erry@DC-2:~$ sudo -l

