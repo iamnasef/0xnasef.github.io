@@ -1,7 +1,7 @@
 title: Muhammad Nasef | Application Security Engineer 
 author: Muhammad Nasef
 email: muhammadelnasef@gmail.com
-description: Muhammad Nasef | Application Security Engineer 
+description: Muhammad Nasef | Application Security Engineer | CTF Walkthroughs
 show_excerpts: true # set to true to show excerpts on the homepage
 permalink: /blog/:title/
 # Minima date format
@@ -9,6 +9,7 @@ permalink: /blog/:title/
 sass:
   sass_dir: _sass
 plainwhite:
+  analytics_id: "UA-179025129-1"
   name: Muhammad Nasef
   tagline: Application Security Engineer 
   date_format: "%b %-d, %Y"
@@ -17,6 +18,7 @@ plainwhite:
   dark_mode: true # set to true to add dark mode toggle
   portfolio_image: "assets/portfolio.png" # the path from the base directory of the site to the image to display (no / at the start)
   html_lang: "en" # set the lang attribute of the <html> tag for the pages. See here for a list of codes: https://www.w3schools.com/tags/ref_country_codes.asp
+  
   condensed_mobile:
     #- home
     - page
