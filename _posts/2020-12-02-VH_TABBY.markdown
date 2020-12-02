@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Tabby HackTheBox Walkthrough"
-date:   2020-09-27 15:00:00 +0530
+date:   2020-12-02 15:00:00 +0530
 categories: HackTheBox CTF
 ---
 Tabby is a machine in which I used Local File Inclusion to get tomcat credintials to obtain shell access and then used enumeration and lxd to get root Access.
