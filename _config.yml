@@ -1,7 +1,7 @@
-title: Muhammad Nasef | Cyber Security Analyst
+title: Muhammad Nasef | Information Security Consultant
 author: Muhammad Nasef
 email: me@muhammadnasef.com
-description: Muhammad Nasef | Cyber Security Analyst | CTF Walkthroughs
+description: Muhammad Nasef | Information Security Consultant | CTF Walkthroughs
 show_excerpts: true # set to true to show excerpts on the homepage
 permalink: /blog/:title/
 # Minima date format
@@ -11,7 +11,7 @@ sass:
 plainwhite:
   analytics_id: "UA-179025129-1"
   name: Muhammad Nasef
-  tagline: Cyber Security Analyst
+  tagline: Information Security Consultant
   date_format: "%b %-d, %Y"
   sitemap: true # set to true to generate sitemap.xml content
   search: true # set to true to enable searchbar
