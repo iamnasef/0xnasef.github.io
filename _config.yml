@@ -25,16 +25,16 @@ plainwhite:
     - post
   # generate social links in footer
   social_links:
-    twitter: nasefmuhammad
-    github:  nasefmuhammad
-    linkedIn: in/nasefmuhammad
+    twitter: 0xnasef
+    github:  0xnasef
+    linkedIn: in/0xnasef
     #rss: rss
     #dribbble: jekyll
     #flickr:   jekyll
     #instagram: jekyll
     #pinterest: jekyll
     #youtube: jekyll
-    #facebook: jekyll
+    facebook: 0xnasef
     #soundcloud: jekyll
     #telegram: jekyll
     #gitlab: jekyll
