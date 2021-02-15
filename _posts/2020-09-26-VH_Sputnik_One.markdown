@@ -63,7 +63,7 @@ Four HTTP Services is up, the 8089 is down, the 8191 has only text, the 55555 ha
 ## Git History
 I tried SQLmap then bruteforcing the 61337 but it's neither vulerable to SQL Injector nor I got the creds by bruteforcing. the nmap result above shows /.git/ directory so I started reading the files until I got the repo's clone url. 
 
-![Username](/assets/machines/vulnhub/sputnik1/1.png)
+![Username](/assets/image/004/1.png)
 
 so I cloned it and browsed it's history until I got a secret file contains a credintials. I tried the credintials on the 61337 http service and it worked!
 
@@ -134,7 +134,7 @@ sputnik:ameer_says_thank_you_and_good_job
 
 ```
 
-![Username](/assets/machines/vulnhub/sputnik1/2.png)
+![Username](/assets/image/004/2.png)
 
 ## Basic Shell
 

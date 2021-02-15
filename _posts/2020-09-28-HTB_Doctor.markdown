@@ -40,7 +40,7 @@ ff02::2 ip6-allrouters
 ## Testing
 So First I tried to browse the site using the ip there is nothing important there so I got in using doctors.htb and a login page appeared!
 
-![Username](/assets/machines/hackthebox/doctor/1.png)
+![Username](/assets/image/010/1.png)
 
 I made an account and logged in and started making new messages. I was susspious about three things as the machine name is "Doctor"
 
@@ -49,23 +49,23 @@ I made an account and logged in and started making new messages. I was susspious
 3. Server Side Template Injection (Succeed)
 
 Using the inspect element I found another directory 
-![Username](/assets/machines/hackthebox/doctor/2.png)
+![Username](/assets/image/010/2.png)
 
 I tested the new messages both title and content. so found title is vulnerable to SSTI and visite /archive to execute. and found the code executed so it's Server-Side Template Injection.
-![Username](/assets/machines/hackthebox/doctor/3.png)
+![Username](/assets/image/010/3.png)
 
-![Username](/assets/machines/hackthebox/doctor/4.png)
+![Username](/assets/image/010/4.png)
 
 I tried to identify the template engine and it was jinja 2. So, I started listening on netcat and added the payload to title as the pervious example and executed it as I visited /archive
 ```
 nc -lvnp 9999
 ```
-![Username](/assets/machines/hackthebox/doctor/5.png)
+![Username](/assets/image/010/5.png)
 
 ## Privilege Escalation 
 I ran Linpeas and found a strange thing in password in logs section 
 
-![Username](/assets/machines/hackthebox/doctor/6.png)
+![Username](/assets/image/010/6.png)
 
 So, I tried to su shaun using this as a password and it worked! At this time, I was thinking about the usage of Splunkd so I started searching for exploits and found this one
 [Exploit](https://github.com/DaniloCaruso/SplunkWhisperer2/blob/master/PySplunkWhisperer2/PySplunkWhisperer2_remote.py)

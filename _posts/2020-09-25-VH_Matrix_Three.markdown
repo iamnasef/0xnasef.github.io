@@ -64,7 +64,7 @@ by OJ Reeves (@TheColonial) & Christian Mehlmauer (@_FireFart_)
 ```
 The directory is made of dicrectories inside directories, so you may go inside each directory or make a script to identify the wanted directory or better BRUTEFORCE. I tried to get the name of main character in the movie "neo" and tried diffrenet combinations as 32 86 and finally what worked is 64. it contained a file called secret.gz
 
-![Username](/assets/machines/vulnhub/matrix3/1.png)
+![Username](/assets/image/003/1.png)
 
 ```
 kali@kali:~/Downloads$ gzip -d secret.gz 
@@ -81,11 +81,11 @@ kali@kali:~/Downloads$
 
 tryed to unzip it but failed as it's not a gz file. so i run file command and found out that it's just an ascii text which I followed by strings command to give me this string. It appeared as a username and a hashed password so I cracked the hash and the password truned to be "passwd"
 
-![Username](/assets/machines/vulnhub/matrix3/2.png)
+![Username](/assets/image/003/2.png)
 
 I tried to use those credinatials to connect via ssh but no luck. so, I tried to access the http service on the other port and found out that there is a basic authenticaion dialog. I used the credintials found above and voila it worked!
 
-![Username](/assets/machines/vulnhub/matrix3/3.png)
+![Username]/assets/image/003/3.png)
 
 The next step is to enumerate web directories with gobuster but this time I added to other options for the username and password of basic auth.
 ```

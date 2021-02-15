@@ -163,7 +163,7 @@ cat /var/www/bludit-3.10.0a/bl-content/databases/users.php
 ```
 
 So, I started cracking the hash 
-![Username](/assets/machines/hackthebox/Blunder/1.png)
+![Username](/assets/image/007/1.png)
 
 then started su to hugo
 

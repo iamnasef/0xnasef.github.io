@@ -47,7 +47,7 @@ So Imeditatly I ran SQLMAP to exploit, dump database and evnatioly crack the has
 sqlmap -u 192.168.198.143/gallery/gallery.php?id=1 --dump
 ```
 
-![Username](/assets/machines/vulnhub/KL12/1.png)
+![Username](/assets/image/006/1.png)
 
 Then I ssh'd to user loneferret.
 
@@ -76,7 +76,7 @@ loneferret@Kioptrix3:~$ export TERM=xterm
 
 Then i opened /etc/passwd and added yoyo -root- user.
 
-![Username](/assets/machines/vulnhub/KL12/2.png)
+![Username](/assets/image/006/2.png)
 
 Then I logged in using ssh to the created user.
 ```

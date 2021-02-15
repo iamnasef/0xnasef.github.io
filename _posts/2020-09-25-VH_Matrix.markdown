@@ -71,29 +71,29 @@ Nothing really important here.
 ## Inspecting Element
 So, I started digging in the http services in port 80 and 3117. I found a base64 encoded text while inspecting element on port 31337.
 
-![Username](/assets/machines/vulnhub/matrix/1.png)
+![Username]/assets/image/002/1.png)
 
 ## Cracking
 
 After decoding
 
-![Username](/assets/machines/vulnhub/matrix/2.png)
+![Username](/assets/image/002/2.png)
 
 so I visted http://192.168.198.139:1337/Cypher.matrix , a filed was downloaded which contained this strange ciphertext
 
-![Username](/assets/machines/vulnhub/matrix/3.png)
+![Username](/assets/image/002/3.png)
 
 I used online crypto Identifier and the text was identified as Brainfuck Endcoding
 
-![Username](/assets/machines/vulnhub/matrix/4.png)
+![Username](/assets/image/002/4.png)
 
 So I used another online tool to decode the text
 
-![Username](/assets/machines/vulnhub/matrix/5.png)
+![Username](/assets/image/002/5.png)
 
 The text contains our password with missing two letters so I used an online combination
 maker and prefix adder to make my wordlist
-![Username](/assets/machines/vulnhub/matrix/6.png)
+![Username](//assets/image/002/6.png)
 
 Then I used hydra to bruteforce the ssh password
 

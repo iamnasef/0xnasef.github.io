@@ -60,25 +60,25 @@ I found a login form in index.php, So I tried SQLmap to test for SQL injection b
 Then, I started testing with inputs and error messages and it was fruitful. The error messages gave me hints about the the correct username and correct password then the correct hashing algorithm. You can see the diffrence below.
 
 ### Username guessing 
-![Username](/assets/machines/vulnhub/ted/1.png)
+![Username](/assets/image/001/1.png)
 
 ### Password guessing 
-![Password](/assets/machines/vulnhub/ted/2.png)
+![Password](/assets/image/001/2.png)
 
 ### Hashing Algorithm guessing
-![Hash](/assets/machines/vulnhub/ted/3.png)
+![Hash](/assets/image/001/3.png)
 
 The correct username is admin and the correct password is hash sha256 of word admin
 
 
 ## Local File Inclusion
 When I typed /etc/passwd it retrived the content of the file, so it's clearly a LFI vulnerability. 
-![Hash](/assets/machines/vulnhub/ted/4.png)
+![Hash](/assets/image/001/4.png)
 
 
 
 After many attemps like reading /etc/shadow and Log poisoning via apache logs, I found a suspicous cookie. so I tried to change it's value and access /var/lib/php/sessions/sess_ via the browser and it worked!
-![Hash](/assets/machines/vulnhub/ted/5.png)
+![Hash](/assets/image/001/5.png)
 
 Immediately  I changed the cookie value to 
 

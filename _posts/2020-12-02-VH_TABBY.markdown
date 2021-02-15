@@ -54,7 +54,7 @@ The tomcat cred files required me to do some guessing as it's not in the default
 ```
 view-source:http://megahosting.htb/news.php?file=../../../../../../../../../../../../../../../../../../../../../../../../../../../usr/share/tomcat9/etc/tomcat-users.xml
 ```
-![Username](/assets/machines/hackthebox/tabby/1.png)
+![Username](/assets/image/008/1.png)
 
 Imedittly I searched for ways to deploy war shell. and found one using msfvenom and curl
 

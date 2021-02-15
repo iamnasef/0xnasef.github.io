@@ -65,7 +65,7 @@ Just the default directories and nothing interesting.
 ## Web Enumeration
 Using manual browsing I found the first flag.
 
-![Username](/assets/machines/vulnhub/dc2/1.png)
+![Username](/assets/image/005/1.png)
 
 This message implied that I use this tool to generate the wordlist
 ```
@@ -205,7 +205,7 @@ Trying admin / log Time: 00:00:44 <===========================================> 
 ```
 
 So, I got two users' credinatials! I logged in as jerry and found the next flag
-![Username](/assets/machines/vulnhub/dc2/2.png)
+![Username](/assets/image/005/2.png)
 ## From Tom to Jerry
 The first thing I thought of from this hint is to ssh. So, I sshed as Tom but with restriected shell ! I bypassed it using using vi.
 ```
